@@ -366,6 +366,43 @@ function shuffle(arr){
   return a;
 }
 
+// Selects `count` questions from pool whose points sum to exactly `targetPoints`,
+// using a randomized greedy pick + local-search swap refinement.
+function buildExamQueue(pool, count, targetPoints){
+  if(pool.length < count) return shuffle(pool);
+  const pts = i => ALL_Q[i].pts || 1;
+
+  function attempt(){
+    const shuffled = shuffle(pool);
+    let selected = shuffled.slice(0, count);
+    let rest = shuffled.slice(count);
+    let sum = selected.reduce((s,i)=>s+pts(i), 0);
+    let diff = targetPoints - sum;
+    let iterations = 0;
+    while(diff !== 0 && iterations < 4000 && rest.length){
+      iterations++;
+      const si = Math.floor(Math.random()*selected.length);
+      const ri = Math.floor(Math.random()*rest.length);
+      const delta = pts(rest[ri]) - pts(selected[si]);
+      const newDiff = diff - delta;
+      if(Math.abs(newDiff) < Math.abs(diff)){
+        const tmp = selected[si];
+        selected[si] = rest[ri];
+        rest[ri] = tmp;
+        diff = newDiff;
+      }
+    }
+    return {selected, diff};
+  }
+
+  let best = attempt();
+  for(let t=0; t<15 && best.diff !== 0; t++){
+    const candidate = attempt();
+    if(Math.abs(candidate.diff) < Math.abs(best.diff)) best = candidate;
+  }
+  return shuffle(best.selected);
+}
+
 function gaugeSvg(pct){
   // semicircle gauge 0-100, zones red(0-50) amber(50-75) green(75-100)
   const cx=110, cy=110, r=95;
@@ -419,7 +456,7 @@ function renderStart(){
       </div>
       ${resumeHtml}
       <button class="big-btn" onclick="startQuiz('full')">Започни го целиот тест</button>
-      <button class="big-btn secondary" onclick="startQuiz('exam')">Симулација на испит · 30 прашања · ⏱ 25 мин</button>
+      <button class="big-btn secondary" onclick="startQuiz('exam')">Симулација на испит · 30 прашања · 120 поени · ⏱ 60 мин</button>
       <button class="big-btn secondary" onclick="startQuiz('browse')">📖 Режим на учење (слободно прелистување)</button>
       <button class="big-btn ghost" onclick="startQuiz('wrong')" id="wrongBtn">Вежбај само погрешени</button>
       <button class="big-btn ghost" onclick="startQuiz('bookmarked')" id="bmBtn">${bmCount>0 ? `⭐ Обележани · ${bmCount}` : ''}</button>
@@ -604,8 +641,8 @@ function startQuiz(mode){
   } else if(mode==='browse'){
     state.queue = catIdx.slice();
   } else if(mode==='exam'){
-    state.queue = shuffle(catIdx).slice(0,30);
-    state.examEndTime = Date.now() + 25*60*1000;
+    state.queue = buildExamQueue(catIdx, 30, 120);
+    state.examEndTime = Date.now() + 60*60*1000;
     startTimer();
   } else if(mode==='wrong'){
     state.queue = shuffle(getWrongIds());
@@ -679,6 +716,7 @@ function updateHeaderStats(){
 
 function renderQuestion(){
   state.answered = false;
+  state.pendingIdx = null;
   const q = currentQ();
   const gidx = state.queue[state.idx];
   const isExam = state.mode==='exam';
@@ -696,10 +734,11 @@ function renderQuestion(){
   starBtn.textContent = bm ? '★' : '☆';
 
   const existing = state.answers[gidx];
+  const locked = isExam && !!existing;
 
   const typeLbl = q.type==='order' ? 'Редослед на минување' : (q.type==='reveal' ? 'Отвори прашање' : (q.type==='match' ? 'Сообраќаен знак' : 'Прашање бр. '+q.n));
   const ptsTxt = q.pts ? `${q.pts} ${q.pts===1?'поен':'поени'}` : '';
-  let html = `<div class="q-card"><div class="q-cat">№${q.n} · ${typeLbl}${ptsTxt ? ' · '+ptsTxt : ''}</div>`;
+  let html = `<div class="q-card"><div class="q-cat">№${q.n} · ${typeLbl}${ptsTxt ? ' · '+ptsTxt : ''}${locked?' · 🔒 Потврдено':''}</div>`;
   html += `<div class="q-stem">${q.stem}</div>`;
   if(q.img){
     html += `<div class="q-img-wrap"><img src="${q.img}"></div>`;
@@ -708,10 +747,8 @@ function renderQuestion(){
     if(isExam){
       const savedVal = existing ? existing.selected : '';
       html += `<div class="reveal-btn-wrap">
-        <input type="text" id="revealInput" placeholder="Внеси го одговорот..." inputmode="numeric" autocomplete="off" value="${savedVal||''}"
-          style="width:100%;padding:14px;font-size:17px;border:2px solid var(--border);border-radius:12px;box-sizing:border-box;"
-          oninput="examSaveReveal()">
-        <div style="font-size:12px;color:var(--muted);margin-top:8px;">${savedVal ? '✓ Одговорот е зачуван' : 'Внеси одговор (се зачувува автоматски)'}</div>
+        <input type="text" id="revealInput" placeholder="Внеси го одговорот..." inputmode="numeric" autocomplete="off" value="${savedVal||''}" ${locked?'disabled':''}
+          style="width:100%;padding:14px;font-size:17px;border:2px solid var(--border);border-radius:12px;box-sizing:border-box;">
       </div>`;
     } else {
       html += `<div class="reveal-btn-wrap">
@@ -727,7 +764,8 @@ function renderQuestion(){
     q.options.forEach((opt,i)=>{
       const optImg = q.optImgs && q.optImgs[i];
       const selCls = (isExam && existing && existing.selected===i) ? ' selected' : '';
-      html += `<div class="answer${selCls}" data-i="${i}" onclick="selectAnswer(${i})">
+      const disCls = locked ? ' disabled' : '';
+      html += `<div class="answer${selCls}${disCls}" data-i="${i}" onclick="selectAnswer(${i})">
         <div class="idx">${i+1}</div>
         <div class="txt">${optImg ? `<img src="${optImg}">` : opt}</div>
       </div>`;
@@ -740,25 +778,56 @@ function renderQuestion(){
   const footer = document.getElementById('footer');
   footer.classList.remove('hidden');
   if(isExam){
-    const isFirst = state.idx===0, isLast = state.idx===state.queue.length-1;
-    footer.innerHTML = `<div class="browse-nav">
-      <button class="big-btn secondary" onclick="examPrev()" ${isFirst?'disabled style="opacity:.4"':''}>← Претходно</button>
-      ${isLast
-        ? `<button class="big-btn" style="background:var(--green);" onclick="if(confirm('Да го предадеш испитот?')) renderResults();">Предај испит ✓</button>`
-        : `<button class="big-btn" onclick="examNext()">Следно →</button>`}
-    </div>
-    <button class="big-btn ghost" style="margin-top:8px;" onclick="if(confirm('Да го предадеш испитот сега?')) renderResults();">Предај го испитот сега</button>`;
+    const unansweredLeft = state.queue.some(id=>!state.answers[id]);
+    footer.innerHTML = `
+      <button class="big-btn" id="confirmBtn" onclick="confirmExamAnswer()" ${locked?'disabled style="opacity:.4;background:var(--muted);"':''}>${locked ? '✓ Потврдено' : 'Потврди одговор ✓'}</button>
+      <div class="browse-nav" style="margin-top:8px;">
+        <button class="big-btn secondary" onclick="examPrev()">← Претходно неодг.</button>
+        <button class="big-btn secondary" onclick="examNext()">Следно неодг. →</button>
+      </div>
+      <button class="big-btn ghost" style="margin-top:8px;${unansweredLeft?'color:var(--red);':''}" onclick="if(confirm('${unansweredLeft?'Имаш неодговорени прашања! Да го предадеш испитот сепак?':'Да го предадеш испитот?'}')) renderResults();">🏁 Крај на испитот</button>`;
   } else {
     footer.innerHTML = `<button class="big-btn secondary" disabled id="nextBtn" style="opacity:.4">Продолжи</button>`;
   }
   saveProgress();
 }
 
+function confirmExamAnswer(){
+  const q = currentQ();
+  const gidx = state.queue[state.idx];
+  if(state.answers[gidx]) return;
+  if(q.type === 'reveal'){
+    const input = document.getElementById('revealInput');
+    const userVal = (input.value || '').trim().replace(',', '.');
+    if(!userVal){ alert('Внеси одговор пред да потврдиш.'); return; }
+    const correctVal = q.options[0].trim();
+    const isCorrect = userVal === correctVal || parseFloat(userVal) === parseFloat(correctVal);
+    state.answers[gidx] = {selected: userVal, correct: isCorrect};
+  } else {
+    if(state.pendingIdx === null){ alert('Избери одговор пред да потврдиш.'); return; }
+    const correct = state.pendingIdx === q.correct;
+    state.answers[gidx] = {selected: state.pendingIdx, correct};
+  }
+  vibrate(30);
+  updateHeaderStats();
+  renderQuestion();
+}
+
 function examPrev(){
-  if(state.idx>0){ state.idx--; renderQuestion(); }
+  const n = state.queue.length;
+  for(let step=1; step<=n; step++){
+    const i = (state.idx - step + n) % n;
+    if(!state.answers[state.queue[i]]){ state.idx = i; renderQuestion(); return; }
+  }
+  alert('Сите прашања се одговорени.');
 }
 function examNext(){
-  if(state.idx < state.queue.length-1){ state.idx++; renderQuestion(); }
+  const n = state.queue.length;
+  for(let step=1; step<=n; step++){
+    const i = (state.idx + step) % n;
+    if(!state.answers[state.queue[i]]){ state.idx = i; renderQuestion(); return; }
+  }
+  alert('Сите прашања се одговорени.');
 }
 function examSaveReveal(){
   const q = currentQ();
@@ -895,14 +964,13 @@ function selectAnswer(i){
   const correct = (i === q.correct);
 
   if(state.mode==='exam'){
-    state.answers[qid] = {selected:i, correct};
-    vibrate(30);
+    if(state.answers[qid]) return; // locked, already confirmed
+    state.pendingIdx = i;
     document.querySelectorAll('.answer').forEach(el=>{
       el.classList.remove('selected');
       const ei = parseInt(el.dataset.i);
       if(ei === i) el.classList.add('selected');
     });
-    saveProgress();
     return;
   }
 
