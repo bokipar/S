@@ -79,6 +79,8 @@ main{flex:1;padding:22px 20px 20px;padding-bottom:150px;background:var(--card);}
 .answer .txt{flex:1;font-size:14.5px;line-height:1.45;padding-top:3px;color:var(--text);}
 .answer img{max-width:100%;border-radius:8px;}
 .answer.correct{border-color:var(--green);background:var(--green-bg);}
+.answer.selected{border-color:var(--blue);background:var(--blue-bg);}
+.answer.selected .idx{background:var(--blue);color:#fff;}
 .answer.correct .idx{background:var(--green);color:#fff;}
 .answer.correct .txt{color:#14532d;}
 .answer.wrong{border-color:var(--red);background:var(--red-bg);}
@@ -430,6 +432,26 @@ function renderHistory(){
       html += `</div>`;
     }
 
+    html += `<div style="font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.6px;font-weight:700;margin:18px 0 8px;">🏆 Ранг-листа · најуспешни обиди</div>
+    <div class="result-list">`;
+    const ranked = hist.slice().sort((a,b)=>{
+      if(b.pct !== a.pct) return b.pct - a.pct;
+      const at = a.elapsedMs || Infinity, bt = b.elapsedMs || Infinity;
+      return at - bt;
+    }).slice(0,10);
+    const medals = ['🥇','🥈','🥉'];
+    ranked.forEach((h,i)=>{
+      const durTxt = h.elapsedMs ? formatDuration(h.elapsedMs) : '—';
+      html += `<div class="result-item" style="flex-direction:column;align-items:flex-start;gap:2px;">
+        <div style="display:flex;justify-content:space-between;width:100%;">
+          <span>${medals[i]||('#'+(i+1))} ${fmtDate(h.date)} · ${modeLabel(h.mode)}</span>
+          <span class="${h.passed?'ok':'no'}">${h.correctCount}/${h.total} (${h.pct}%)</span>
+        </div>
+        <div style="font-size:11px;color:var(--muted);">⏱ ${durTxt}</div>
+      </div>`;
+    });
+    html += `</div>`;
+
     html += `<div style="font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.6px;font-weight:700;margin:18px 0 8px;">Сите обиди</div>
     <div class="result-list">`;
     hist.forEach(h=>{
@@ -448,8 +470,21 @@ function renderHistory(){
   if(hist.length>0){
     html += `<button class="big-btn ghost" onclick="clearHistory()">Избриши ја историјата</button>`;
   }
+  html += `<button class="big-btn ghost" style="color:var(--red);" onclick="resetAll()">🔄 Ресетирај сè (тест, историја, обележани)</button>`;
   html += `</div>`;
   document.getElementById('main').innerHTML = html;
+}
+
+function resetAll(){
+  if(!confirm('Ова целосно ќе ги избрише: тековниот тест во тек, целата историја на обиди и сите обележани прашања. Сигурен си?')) return;
+  try{
+    localStorage.removeItem(HISTORY_KEY);
+    localStorage.removeItem(PROGRESS_KEY);
+    localStorage.removeItem(BOOKMARK_KEY);
+  }catch(e){}
+  clearTimer();
+  state = { queue: [], idx: 0, answers: {}, mode: null, answered: false, category: state.category, browseIdx: 0, examEndTime: null, timerInterval: null };
+  renderStart();
 }
 
 function clearHistory(){
@@ -543,10 +578,15 @@ function clearTimer(){
 function currentQ(){ return ALL_Q[state.queue[state.idx]]; }
 
 function updateHeaderStats(){
-  const correctCount = Object.values(state.answers).filter(a=>a.correct).length;
-  const wrongCount = Object.values(state.answers).filter(a=>!a.correct).length;
-  document.getElementById('scoreOk').textContent = `✓ ${correctCount}`;
-  document.getElementById('scoreNo').textContent = `✗ ${wrongCount}`;
+  if(state.mode==='exam'){
+    document.getElementById('scoreOk').textContent = '';
+    document.getElementById('scoreNo').textContent = '';
+  } else {
+    const correctCount = Object.values(state.answers).filter(a=>a.correct).length;
+    const wrongCount = Object.values(state.answers).filter(a=>!a.correct).length;
+    document.getElementById('scoreOk').textContent = `✓ ${correctCount}`;
+    document.getElementById('scoreNo').textContent = `✗ ${wrongCount}`;
+  }
   const pct = Math.round((state.idx)/state.queue.length*100);
   const circumference = 119.4;
   const offset = circumference - (pct/100)*circumference;
@@ -558,6 +598,7 @@ function renderQuestion(){
   state.answered = false;
   const q = currentQ();
   const gidx = state.queue[state.idx];
+  const isExam = state.mode==='exam';
   document.getElementById('headerEyebrow').textContent = `Прашање ${state.idx+1} од ${state.queue.length}`;
   document.getElementById('headerTitle').textContent = 'Тест за возачка дозвола';
   document.getElementById('qCounter').textContent = `Прашање ${state.idx+1}/${state.queue.length}`;
@@ -569,6 +610,8 @@ function renderQuestion(){
   starBtn.classList.toggle('active', bm);
   starBtn.textContent = bm ? '★' : '☆';
 
+  const existing = state.answers[gidx];
+
   const typeLbl = q.type==='order' ? 'Редослед на минување' : (q.type==='reveal' ? 'Отвори прашање' : (q.type==='match' ? 'Сообраќаен знак' : 'Прашање бр. '+q.n));
   const ptsTxt = q.pts ? `${q.pts} ${q.pts===1?'поен':'поени'}` : '';
   let html = `<div class="q-card"><div class="q-cat">№${q.n} · ${typeLbl}${ptsTxt ? ' · '+ptsTxt : ''}</div>`;
@@ -577,18 +620,29 @@ function renderQuestion(){
     html += `<div class="q-img-wrap"><img src="${q.img}"></div>`;
   }
   if(q.type === 'reveal'){
-    html += `<div class="reveal-btn-wrap">
-      <input type="text" id="revealInput" placeholder="Внеси го одговорот..." inputmode="numeric" autocomplete="off"
-        style="width:100%;padding:14px;font-size:17px;border:2px solid var(--border);border-radius:12px;box-sizing:border-box;"
-        onkeydown="if(event.key==='Enter'){ event.preventDefault(); checkRevealAnswer(); }">
-      <button class="big-btn" onclick="checkRevealAnswer()" style="margin-top:10px;">Провери</button>
-      <div id="revealBox" class="hidden reveal-box"></div>
-    </div>`;
+    if(isExam){
+      const savedVal = existing ? existing.selected : '';
+      html += `<div class="reveal-btn-wrap">
+        <input type="text" id="revealInput" placeholder="Внеси го одговорот..." inputmode="numeric" autocomplete="off" value="${savedVal||''}"
+          style="width:100%;padding:14px;font-size:17px;border:2px solid var(--border);border-radius:12px;box-sizing:border-box;"
+          oninput="examSaveReveal()">
+        <div style="font-size:12px;color:var(--muted);margin-top:8px;">${savedVal ? '✓ Одговорот е зачуван' : 'Внеси одговор (се зачувува автоматски)'}</div>
+      </div>`;
+    } else {
+      html += `<div class="reveal-btn-wrap">
+        <input type="text" id="revealInput" placeholder="Внеси го одговорот..." inputmode="numeric" autocomplete="off"
+          style="width:100%;padding:14px;font-size:17px;border:2px solid var(--border);border-radius:12px;box-sizing:border-box;"
+          onkeydown="if(event.key==='Enter'){ event.preventDefault(); checkRevealAnswer(); }">
+        <button class="big-btn" onclick="checkRevealAnswer()" style="margin-top:10px;">Провери</button>
+        <div id="revealBox" class="hidden reveal-box"></div>
+      </div>`;
+    }
   } else {
     html += `<div id="answersWrap">`;
     q.options.forEach((opt,i)=>{
       const optImg = q.optImgs && q.optImgs[i];
-      html += `<div class="answer" data-i="${i}" onclick="selectAnswer(${i})">
+      const selCls = (isExam && existing && existing.selected===i) ? ' selected' : '';
+      html += `<div class="answer${selCls}" data-i="${i}" onclick="selectAnswer(${i})">
         <div class="idx">${i+1}</div>
         <div class="txt">${optImg ? `<img src="${optImg}">` : opt}</div>
       </div>`;
@@ -600,7 +654,34 @@ function renderQuestion(){
 
   const footer = document.getElementById('footer');
   footer.classList.remove('hidden');
-  footer.innerHTML = `<button class="big-btn secondary" disabled id="nextBtn" style="opacity:.4">Продолжи</button>`;
+  if(isExam){
+    const isFirst = state.idx===0, isLast = state.idx===state.queue.length-1;
+    footer.innerHTML = `<div class="browse-nav">
+      <button class="big-btn secondary" onclick="examPrev()" ${isFirst?'disabled style="opacity:.4"':''}>← Претходно</button>
+      ${isLast
+        ? `<button class="big-btn" style="background:var(--green);" onclick="if(confirm('Да го предадеш испитот?')) renderResults();">Предај испит ✓</button>`
+        : `<button class="big-btn" onclick="examNext()">Следно →</button>`}
+    </div>
+    <button class="big-btn ghost" style="margin-top:8px;" onclick="if(confirm('Да го предадеш испитот сега?')) renderResults();">Предај го испитот сега</button>`;
+  } else {
+    footer.innerHTML = `<button class="big-btn secondary" disabled id="nextBtn" style="opacity:.4">Продолжи</button>`;
+  }
+  saveProgress();
+}
+
+function examPrev(){
+  if(state.idx>0){ state.idx--; renderQuestion(); }
+}
+function examNext(){
+  if(state.idx < state.queue.length-1){ state.idx++; renderQuestion(); }
+}
+function examSaveReveal(){
+  const q = currentQ();
+  const gidx = state.queue[state.idx];
+  const val = (document.getElementById('revealInput').value || '').trim().replace(',', '.');
+  const correctVal = q.options[0].trim();
+  const isCorrect = val.length > 0 && (val === correctVal || parseFloat(val) === parseFloat(correctVal));
+  state.answers[gidx] = {selected: val, correct: isCorrect};
   saveProgress();
 }
 
@@ -671,19 +752,26 @@ function checkRevealAnswer(){
 
   state.answered = true;
   state.answers[qid] = {selected: userVal, correct: isCorrect};
-  vibrate(isCorrect ? 45 : [40,60,40]);
 
   input.disabled = true;
   document.querySelector('.reveal-btn-wrap .big-btn').disabled = true;
 
   const box = document.getElementById('revealBox');
   box.classList.remove('hidden');
-  if(isCorrect){
+  if(state.mode==='exam'){
+    vibrate(30);
+    box.style.background = 'var(--blue-bg)';
+    box.style.border = '1.5px solid var(--blue)';
+    box.style.color = 'var(--text)';
+    box.textContent = `Одговорот е зачуван: ${userVal || '(празно)'}`;
+  } else if(isCorrect){
+    vibrate(45);
     box.style.background = 'var(--green-bg)';
     box.style.border = '1.5px solid var(--green)';
     box.style.color = '#14532d';
     box.textContent = `✅ Точно! Одговор: ${correctVal}`;
   } else {
+    vibrate([40,60,40]);
     box.style.background = '#fef2f2';
     box.style.border = '1.5px solid var(--red)';
     box.style.color = '#7f1d1d';
@@ -715,14 +803,26 @@ function selfMark(knew){
 }
 
 function selectAnswer(i){
-  if(state.answered) return;
-  state.answered = true;
   const q = currentQ();
   const qid = state.queue[state.idx];
   const correct = (i === q.correct);
+
+  if(state.mode==='exam'){
+    state.answers[qid] = {selected:i, correct};
+    vibrate(30);
+    document.querySelectorAll('.answer').forEach(el=>{
+      el.classList.remove('selected');
+      const ei = parseInt(el.dataset.i);
+      if(ei === i) el.classList.add('selected');
+    });
+    saveProgress();
+    return;
+  }
+
+  if(state.answered) return;
+  state.answered = true;
   state.answers[qid] = {selected:i, correct};
   vibrate(correct ? 45 : [40,60,40]);
-
   document.querySelectorAll('.answer').forEach(el=>{
     el.classList.add('disabled');
     const ei = parseInt(el.dataset.i);
