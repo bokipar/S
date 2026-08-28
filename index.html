@@ -114,8 +114,25 @@ footer{position:sticky;bottom:0;background:linear-gradient(180deg,rgba(255,255,2
 .self-assess .answer{flex:1;justify-content:center;margin-bottom:0;}
 .self-assess .answer .txt{text-align:center;flex:none;padding-top:0;}
 
-.star-btn{position:absolute;top:16px;right:20px;background:none;border:none;font-size:24px;cursor:pointer;color:var(--muted);padding:4px;line-height:1;}
-.star-btn.active{color:#f2b705;}
+.toolbar-row{display:flex;align-items:center;gap:8px;}
+.icon-btn{width:36px;height:36px;border-radius:10px;background:var(--bg);border:1px solid var(--border);font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--text);flex-shrink:0;}
+.icon-btn:active{transform:scale(.94);}
+.icon-btn.active{background:#fef9e7;border-color:#f2b705;color:#f2b705;}
+#qCounter{cursor:pointer;text-decoration:underline;text-decoration-color:var(--border);text-underline-offset:3px;}
+
+#qGridOverlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:50;display:flex;align-items:flex-end;}
+#qGridOverlay .sheet{background:var(--card);width:100%;max-width:640px;margin:0 auto;border-radius:20px 20px 0 0;padding:20px;max-height:75vh;overflow-y:auto;padding-bottom:calc(20px + env(safe-area-inset-bottom));}
+#qGridOverlay .sheet-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;}
+#qGridOverlay .sheet-header h3{margin:0;font-size:16px;}
+#qGridOverlay .close-x{background:var(--bg);border:1px solid var(--border);border-radius:8px;width:30px;height:30px;font-size:15px;cursor:pointer;color:var(--text);}
+.qgrid{display:grid;grid-template-columns:repeat(6,1fr);gap:8px;}
+.qgrid .qcell{aspect-ratio:1;border-radius:9px;border:1.5px solid var(--border);background:var(--bg);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;cursor:pointer;color:var(--text);}
+.qgrid .qcell.answered{background:var(--blue-bg);border-color:var(--blue);color:var(--blue-dim);}
+.qgrid .qcell.current{background:var(--blue);border-color:var(--blue);color:#fff;}
+.qgrid .qcell.flagged{box-shadow:0 0 0 2px #f2b705 inset;}
+.qgrid-legend{display:flex;gap:14px;margin-top:14px;font-size:11px;color:var(--muted);flex-wrap:wrap;}
+.qgrid-legend span{display:inline-flex;align-items:center;gap:5px;}
+.qgrid-legend i{width:12px;height:12px;border-radius:4px;display:inline-block;}
 #timerDisp{font-variant-numeric:tabular-nums;font-weight:700;color:var(--text);}
 #timerDisp.low{color:var(--red);}
 
@@ -140,22 +157,29 @@ footer{position:sticky;bottom:0;background:linear-gradient(180deg,rgba(255,255,2
       </div>
     </div>
     <div id="headerProgress" class="hidden">
-      <div class="ring-wrap">
-        <svg width="46" height="46">
-          <circle class="ring-bg" cx="23" cy="23" r="19" fill="none" stroke-width="4"></circle>
-          <circle class="ring-fg" id="ringFg" cx="23" cy="23" r="19" fill="none" stroke-width="4" stroke-dasharray="119.4" stroke-dashoffset="119.4"></circle>
-        </svg>
-        <div class="ring-num" id="ringNum">0%</div>
+      <div class="toolbar-row">
+        <button id="homeBtn" class="icon-btn" onclick="confirmBackHome()" title="Почетна">✕</button>
+        <button id="resetBtn" class="icon-btn" onclick="resetCurrentTest()" title="Рестартирај">🔄</button>
+        <div style="flex:1;"></div>
+        <button id="gridBtn" class="icon-btn hidden" onclick="toggleQuestionGrid()" title="Сите прашања">☰</button>
+        <button id="starBtn" class="icon-btn" onclick="toggleBookmark()" title="Обележи">☆</button>
       </div>
-      <div class="meta-row">
-        <div class="top" id="qCounter">Прашање 1/695</div>
-        <div class="bottom"><span class="ok" id="scoreOk">✓ 0</span><span class="no" id="scoreNo">✗ 0</span><span id="timerDisp" class="hidden"></span></div>
+      <div style="display:flex;align-items:center;gap:14px;margin-top:10px;">
+        <div class="ring-wrap">
+          <svg width="46" height="46">
+            <circle class="ring-bg" cx="23" cy="23" r="19" fill="none" stroke-width="4"></circle>
+            <circle class="ring-fg" id="ringFg" cx="23" cy="23" r="19" fill="none" stroke-width="4" stroke-dasharray="119.4" stroke-dashoffset="119.4"></circle>
+          </svg>
+          <div class="ring-num" id="ringNum">0%</div>
+        </div>
+        <div class="meta-row">
+          <div class="top" id="qCounter" onclick="toggleQuestionGrid()">Прашање 1/695</div>
+          <div class="bottom"><span class="ok" id="scoreOk">✓ 0</span><span class="no" id="scoreNo">✗ 0</span><span id="timerDisp" class="hidden"></span></div>
+        </div>
       </div>
-      <button id="homeBtn" class="star-btn hidden" style="left:20px;right:auto;font-size:20px;" onclick="confirmBackHome()">✕</button>
-      <button id="resetBtn" class="star-btn hidden" style="left:52px;right:auto;font-size:19px;" onclick="resetCurrentTest()">🔄</button>
-      <button id="starBtn" class="star-btn hidden" onclick="toggleBookmark()">☆</button>
     </div>
   </header>
+  <div id="qGridOverlay" class="hidden"></div>
   <main id="main"></main>
   <footer id="footer" class="hidden"></footer>
 </div>
@@ -233,6 +257,50 @@ function resetCurrentTest(){
   state.queue.forEach(id=>{ delete state.answers[id]; });
   clearProgress();
   startQuiz(state.mode);
+}
+
+function toggleQuestionGrid(){
+  const el = document.getElementById('qGridOverlay');
+  if(!el.classList.contains('hidden')){ closeQuestionGrid(); return; }
+  renderQuestionGrid();
+}
+
+function closeQuestionGrid(){
+  const el = document.getElementById('qGridOverlay');
+  el.classList.add('hidden');
+  el.innerHTML = '';
+}
+
+function renderQuestionGrid(){
+  const el = document.getElementById('qGridOverlay');
+  const curIdx = state.mode==='browse' ? state.browseIdx : state.idx;
+  let cells = '';
+  state.queue.forEach((gidx,i)=>{
+    const answered = !!state.answers[gidx];
+    const flagged = isBookmarked(gidx);
+    const cls = ['qcell'];
+    if(i===curIdx) cls.push('current');
+    else if(answered) cls.push('answered');
+    if(flagged) cls.push('flagged');
+    cells += `<div class="${cls.join(' ')}" onclick="jumpToQuestion(${i})">${i+1}</div>`;
+  });
+  el.innerHTML = `<div class="sheet" onclick="event.stopPropagation()">
+    <div class="sheet-header"><h3>Сите прашања · ${state.queue.length}</h3><button class="close-x" onclick="closeQuestionGrid()">✕</button></div>
+    <div class="qgrid">${cells}</div>
+    <div class="qgrid-legend">
+      <span><i style="background:var(--blue-bg);border:1.5px solid var(--blue);"></i>Одговорено</span>
+      <span><i style="background:var(--bg);border:1.5px solid var(--border);"></i>Неодговорено</span>
+      <span><i style="background:#fef9e7;box-shadow:0 0 0 2px #f2b705 inset;"></i>Обележано</span>
+    </div>
+  </div>`;
+  el.classList.remove('hidden');
+  el.onclick = closeQuestionGrid;
+}
+
+function jumpToQuestion(i){
+  closeQuestionGrid();
+  if(state.mode==='browse'){ state.browseIdx = i; renderBrowse(); }
+  else { state.idx = i; renderQuestion(); }
 }
 
 const HISTORY_KEY = 'vozacka_b_attempts';
@@ -323,6 +391,7 @@ function renderStart(){
   document.getElementById('starBtn').classList.add('hidden');
   document.getElementById('homeBtn').classList.add('hidden');
   document.getElementById('resetBtn').classList.add('hidden');
+  document.getElementById('gridBtn').classList.add('hidden');
   state.category = getSelectedCat();
   const catLabel = (CATS.find(c=>c.code===state.category)||{}).label || state.category;
   document.getElementById('headerEyebrow').textContent = catLabel + ' · МВР база';
@@ -406,6 +475,7 @@ function renderHistory(){
   document.getElementById('starBtn').classList.add('hidden');
   document.getElementById('homeBtn').classList.add('hidden');
   document.getElementById('resetBtn').classList.add('hidden');
+  document.getElementById('gridBtn').classList.add('hidden');
   document.getElementById('headerEyebrow').textContent = 'Историја';
   document.getElementById('headerTitle').textContent = 'Твоите обиди';
   const hist = loadHistory();
@@ -620,6 +690,7 @@ function renderQuestion(){
   starBtn.classList.remove('hidden');
   document.getElementById('homeBtn').classList.remove('hidden');
   document.getElementById('resetBtn').classList.remove('hidden');
+  document.getElementById('gridBtn').classList.remove('hidden');
   const bm = isBookmarked(gidx);
   starBtn.classList.toggle('active', bm);
   starBtn.textContent = bm ? '★' : '☆';
@@ -714,6 +785,7 @@ function renderBrowse(){
   starBtn.classList.remove('hidden');
   document.getElementById('homeBtn').classList.remove('hidden');
   document.getElementById('resetBtn').classList.remove('hidden');
+  document.getElementById('gridBtn').classList.remove('hidden');
   const bm = isBookmarked(gidx);
   starBtn.classList.toggle('active', bm);
   starBtn.textContent = bm ? '★' : '☆';
@@ -866,6 +938,7 @@ function renderResults(){
   document.getElementById('starBtn').classList.add('hidden');
   document.getElementById('homeBtn').classList.add('hidden');
   document.getElementById('resetBtn').classList.add('hidden');
+  document.getElementById('gridBtn').classList.add('hidden');
   document.getElementById('headerEyebrow').textContent = 'Резултат';
   document.getElementById('headerTitle').textContent = 'Тест за возачка дозвола';
 
@@ -876,7 +949,7 @@ function renderResults(){
 
   const totalPoints = ids.reduce((s,id)=>s+(ALL_Q[id].pts||1), 0);
   const earnedPoints = ids.reduce((s,id)=>s + ((state.answers[id]&&state.answers[id].correct) ? (ALL_Q[id].pts||1) : 0), 0);
-  const requiredPoints = Math.round(totalPoints*0.9);
+  const requiredPoints = Math.max(0, totalPoints - 12);
   const passed = state.mode==='exam' ? (earnedPoints >= requiredPoints) : (pct >= 90);
 
   const elapsedMs = Date.now() - state.startTime + (state.elapsedBeforePause||0);
