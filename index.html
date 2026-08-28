@@ -152,6 +152,7 @@ footer{position:sticky;bottom:0;background:linear-gradient(180deg,rgba(255,255,2
         <div class="bottom"><span class="ok" id="scoreOk">✓ 0</span><span class="no" id="scoreNo">✗ 0</span><span id="timerDisp" class="hidden"></span></div>
       </div>
       <button id="homeBtn" class="star-btn hidden" style="left:20px;right:auto;font-size:20px;" onclick="confirmBackHome()">✕</button>
+      <button id="resetBtn" class="star-btn hidden" style="left:52px;right:auto;font-size:19px;" onclick="resetCurrentTest()">🔄</button>
       <button id="starBtn" class="star-btn hidden" onclick="toggleBookmark()">☆</button>
     </div>
   </header>
@@ -222,6 +223,16 @@ function confirmBackHome(){
     saveProgress();
     renderStart();
   }
+}
+
+function resetCurrentTest(){
+  const msg = state.mode==='exam'
+    ? 'Да го рестартираш испитот од почеток? Сите досегашни одговори во овој обид ќе се избришат и тајмерот почнува одново.'
+    : 'Да го рестартираш тестот од почеток? Сите досегашни одговори во овој обид ќе се избришат.';
+  if(!confirm(msg)) return;
+  state.queue.forEach(id=>{ delete state.answers[id]; });
+  clearProgress();
+  startQuiz(state.mode);
 }
 
 const HISTORY_KEY = 'vozacka_b_attempts';
@@ -311,6 +322,7 @@ function renderStart(){
   document.getElementById('footer').classList.add('hidden');
   document.getElementById('starBtn').classList.add('hidden');
   document.getElementById('homeBtn').classList.add('hidden');
+  document.getElementById('resetBtn').classList.add('hidden');
   state.category = getSelectedCat();
   const catLabel = (CATS.find(c=>c.code===state.category)||{}).label || state.category;
   document.getElementById('headerEyebrow').textContent = catLabel + ' · МВР база';
@@ -393,6 +405,7 @@ function renderHistory(){
   document.getElementById('footer').classList.add('hidden');
   document.getElementById('starBtn').classList.add('hidden');
   document.getElementById('homeBtn').classList.add('hidden');
+  document.getElementById('resetBtn').classList.add('hidden');
   document.getElementById('headerEyebrow').textContent = 'Историја';
   document.getElementById('headerTitle').textContent = 'Твоите обиди';
   const hist = loadHistory();
@@ -606,6 +619,7 @@ function renderQuestion(){
   const starBtn = document.getElementById('starBtn');
   starBtn.classList.remove('hidden');
   document.getElementById('homeBtn').classList.remove('hidden');
+  document.getElementById('resetBtn').classList.remove('hidden');
   const bm = isBookmarked(gidx);
   starBtn.classList.toggle('active', bm);
   starBtn.textContent = bm ? '★' : '☆';
@@ -699,6 +713,7 @@ function renderBrowse(){
   const starBtn = document.getElementById('starBtn');
   starBtn.classList.remove('hidden');
   document.getElementById('homeBtn').classList.remove('hidden');
+  document.getElementById('resetBtn').classList.remove('hidden');
   const bm = isBookmarked(gidx);
   starBtn.classList.toggle('active', bm);
   starBtn.textContent = bm ? '★' : '☆';
@@ -850,6 +865,7 @@ function renderResults(){
   document.getElementById('headerProgress').classList.add('hidden');
   document.getElementById('starBtn').classList.add('hidden');
   document.getElementById('homeBtn').classList.add('hidden');
+  document.getElementById('resetBtn').classList.add('hidden');
   document.getElementById('headerEyebrow').textContent = 'Резултат';
   document.getElementById('headerTitle').textContent = 'Тест за возачка дозвола';
 
@@ -876,7 +892,7 @@ function renderResults(){
         const t = ALL_Q[id].type;
         bt[t] = bt[t] || {c:0,t:0};
         bt[t].t++;
-        if(state.answers[id].correct) bt[t].c++;
+        if(state.answers[id] && state.answers[id].correct) bt[t].c++;
       });
       return bt;
     })(),
@@ -906,9 +922,12 @@ function renderResults(){
   ids.forEach(id=>{
     const q = ALL_Q[id];
     const a = state.answers[id];
+    const answered = !!a;
+    const label = answered ? (a.correct?'✓':'✗') : '—';
+    const cls = answered ? (a.correct?'ok':'no') : 'no';
     html += `<div class="result-item">
-      <span>№${q.n}. ${q.stem.slice(0,50)}${q.stem.length>50?'…':''}</span>
-      <span class="${a.correct?'ok':'no'}">${a.correct?'✓':'✗'}</span>
+      <span>№${q.n}. ${q.stem.slice(0,50)}${q.stem.length>50?'…':''}${answered?'':' (без одговор)'}</span>
+      <span class="${cls}">${label}</span>
     </div>`;
   });
   html += `</div>
