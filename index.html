@@ -8,142 +8,150 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Возачка Б">
 <meta name="mobile-web-app-capable" content="yes">
-<meta name="theme-color" content="#f3f4f6">
-<link rel="apple-touch-icon" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALQAAAC0CAIAAACyr5FlAAADc0lEQVR4nO3dS27cRhRAUTnwKpxp1mSvMWtyptlHBgEMQdKVWi0W61E+Z2qpwVe6LDb6Q3/59v3nA7zkj90HwFziIImDJA6SOEjiIImDJA6SOEjiIImDJA6SOEjiIImDJA6SOEjiIImDJA6SOEjiIImDJA6SOEjiIImDJA6SOEjiIImDJA6SOEjiIImDJA6SOEjiIImDJA6SOEjiIImDJA6SOEjiIImDJA6SOEjiIImDJA6SOEjiIImD9HX3Abzt37//2n0Iq/z545/dh/CaL9++/9x9DOkTZ/HY2ESGxvGbZPHYwEQmPuf4Dct4GDn1uDgGrtFpps0+K45pq3O+USswKw5GGRTHqJNmoznrMCgOppkSx5zTZYIhqzElDgYSB0kcJHGQxEESB0kcJHGQxEESB0kcJHGQxEESB0kcJHGQxEESB0kcJHGQzv6u7JCPzl7XmV+pPSkOTRzuhEqWxyGLpZYmsvY5hzJWW7rCC+NQxjnWrfOqOJRxpkWrvSQOZZxvxZofH4cydjl85b0IRjo4DtvGXseuv52DJA7SkXG4pkxw4F/BzkESB0kcJHGQxEESB0kcJHGQxEESB0kcJHGQxEESB0kcJHGQxEESB0kcJHGQxEESB+nr7gN4zYt3Jrn0FyCuNdHEOF6/W82vfx27ps9ddKJZcbzrJkb///C0BX3i0hMNes5x3+2tzry73ntdfaKDbxh3d/W3X4yvctneNdGBbY2I4/k8bz7OHb9ypo0THRjH/svKfYvy/Gfm7MafZqLj70P6rt6fzH/HufLxRzjW3omO7Wn/zsFYx8dxe7yHnPRPfmvvVrx3osNnX7Jz3HGUH7kcbL+UvOjkiVacFasuK9ufTP1WFq32wuccN75m/HDEqf/4EXZ1uWuidfOufUJq/1ht6Qovf29l2vsFn8YJJ95Jb7yNfePxcs7cjM9+V/ac2T7f5WzLRF4EI4mDNCKOj++Z064jn2OiEXEw05Q4PnKiTDjJnvsEE02J4+H6H6p77uoTDYqDac7+78pvceMLZXPOsDdddKKJO8ctazRtHV930Ykm7hy/3P5Z7au41kSj42CviZcVhhAHSRwkcZDEQRIHSRwkcZDEQRIHSRwkcZDEQRIHSRwkcZDEQRIHSRwkcZDEQRIHSRwkcZDEQRIHSRyk/wBapvpJLFvsMQAAAABJRU5ErkJggg==">
+<meta name="theme-color" content="#F7F5EF">
+<link rel="apple-touch-icon" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALQAAAC0CAIAAACyr5FlAAADc0lEQVR4nO3dS27cRhRAUTnwIjKwJt5U1ph1ZZJlZBDAECRdqSWxWI/tc6aWGnyly2KjP/S3H48/H+A1f+w+AOYSB0kcJHGQxEESB0kcJHGQxEESB0kcJHGQxEESB0kcJHGQxEESB0kcJHGQxEESB0kcJHGQxEESB0kcJHGQxEESB0kcJHGQxEESB0kcJHGQxEESB0kcJHGQxEESB0kcJHGQxEESB0kcJHGQxEESB0kcJHGQxEESB0kcJHGQxEESB0kcpO+7D+B9//z95+5DWOXxr393H8Jbvv14/Ln7GNIdZ/HU2ESGxvGbZPHUwEQmPuf4Dct4GDn1uDgGrtFpps0+K45pq3O+USswKw5GGRTHqJNmoznrMCgOppkSx5zTZYIhqzElDgYSB0kcJHGQxEESB0kcJHGQxEESB0kcJHGQxEESB0kcJHGQxEESB0kcJHGQzv6u7JCPzl7XmV+pPSkOTRzuhEqWxyGLpZYmsvY5hzJWW7rCC+NQxjnWrfOqOJRxpkWrvSQOZZxvxZofH4cydjl85b0IRjo4DtvGXseuv52DJA7SkXG4pkxw4F/BzkESB0kcJHGQxEESB0kcJHGQxEESB0kcJHGQxEESB0kcJHGQxEESB0kcJHGQxEESB+n77gN4y6t3Jrn0FyCuNdHEON6+W82vfx27pi9ddKJZcXzoJkb///C0BX3m0hMNes7xudtbnXl3vY+6+kQH3zDu09XffjG+ymV710QHtjUijpfzvPs4n/iVM22c6MA49l9WPrcoL39mzm58NxMdfx/SD/X+bP5PnCtff4Rj7Z3o2J727xyMdXwct8d7yEn/7Lf2bsV7Jzp89iU7xyeO8iuXg+2XkledPNGKs2LVZWX7k6nfyqLVXvic48bXjB+OOPWfPsKuLndNtG7etU9I7R+rLV3h5e+tTHu/4G6ccOKd9Mbb2DceL+fMzfjsd2XPme3+LmdbJvIiGEkcpBFxfH3PnHYduY+JRsTBTFPi+MqJMuEke+kOJpoSx8P1P1T30tUnGhQH05z935Xf4sYXyuacYe+66EQTd45b1mjaOr7tohNN3Dl+uf2z2ldxrYlGx8FeEy8rDCEOkjhI4iCJgyQOkjhI4iCJgyQOkjhI4iCJgyQOkjhI4iCJgyQOkjhI4iCJgyQOkjhI4iCJgyQOkjhI/wEVOu+jrRA6hQAAAABJRU5ErkJggg==">
 
 <style>
 :root{
-  --bg:#f3f4f6; --card:#ffffff; --border:#e5e7eb;
-  --text:#111827; --muted:#6b7280;
-  --blue:#1a56db; --blue-dim:#1544ad; --blue-bg:#eef2ff;
-  --green:#16a34a; --green-bg:#f0fdf4;
-  --red:#dc2626; --red-bg:#fef2f2;
+  --paper:#F7F5EF; --card:#ffffff; --line:#E5E1D3; --line-soft:#EDEAE0;
+  --ink:#1C1D22; --muted:#75726A;
+  --blue:#0B4F9C; --blue-dim:#083C78; --blue-bg:#E9F1FB;
+  --yellow:#FFC63A; --yellow-ink:#3A2900;
+  --green:#1B8A5A; --green-bg:#EAF7F1;
+  --red:#D7263D; --red-bg:#FDEBEE;
   --sans:-apple-system,BlinkMacSystemFont,'SF Pro Text','Segoe UI',Roboto,sans-serif;
+  --mono:ui-monospace,'SF Mono','Roboto Mono',Menlo,Consolas,monospace;
 }
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
 html,body{margin:0;height:100%;}
 body{
-  font-family:var(--sans);background:var(--bg);color:var(--text);
+  font-family:var(--sans);background:var(--paper);color:var(--ink);
   padding-top:env(safe-area-inset-top);padding-bottom:env(safe-area-inset-bottom);
   -webkit-touch-callout:none;-webkit-user-select:none;user-select:none;overscroll-behavior:none;
 }
-#app{max-width:640px;margin:0 auto;min-height:100vh;display:flex;flex-direction:column;background:var(--card);box-shadow:0 0 20px rgba(0,0,0,.05);}
+#app{max-width:640px;margin:0 auto;min-height:100vh;display:flex;flex-direction:column;background:var(--card);box-shadow:0 0 28px rgba(28,29,34,.07);}
 
-header{padding:18px 22px 14px;background:var(--card);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:5;}
-.brand{display:flex;align-items:center;gap:10px;}
-.brand .mark{width:34px;height:34px;border-radius:9px;background:var(--blue);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;}
-.brand h1{font-size:15px;margin:0;font-weight:700;letter-spacing:.2px;color:var(--text);}
-.brand .eyebrow{font-size:10px;text-transform:uppercase;letter-spacing:1.4px;color:var(--blue);font-weight:700;margin-bottom:1px;}
+.lane{height:5px;background-image:repeating-linear-gradient(90deg,var(--yellow) 0 20px,transparent 20px 36px);}
 
-#headerProgress{display:flex;align-items:center;gap:14px;margin-top:16px;}
+header{padding:16px 22px 14px;background:var(--card);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:5;}
+.brand{display:flex;align-items:center;gap:11px;}
+.brand .mark{width:36px;height:36px;border-radius:10px;background:var(--ink);display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0;}
+.brand h1{font-size:15px;margin:0;font-weight:800;letter-spacing:-.1px;color:var(--ink);}
+.brand .eyebrow{font-size:10px;text-transform:uppercase;letter-spacing:1.8px;color:var(--blue);font-weight:800;margin-bottom:2px;}
+
+#headerProgress{margin-top:14px;}
 .ring-wrap{position:relative;width:46px;height:46px;flex-shrink:0;}
 .ring-wrap svg{transform:rotate(-90deg);}
-.ring-wrap .ring-bg{stroke:var(--border);}
+.ring-wrap .ring-bg{stroke:var(--line);}
 .ring-wrap .ring-fg{stroke:var(--blue);transition:stroke-dashoffset .3s ease;stroke-linecap:round;}
-.ring-wrap .ring-num{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:var(--text);}
+.ring-wrap .ring-num{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:10.5px;font-weight:800;color:var(--ink);font-family:var(--mono);}
 .meta-row{flex:1;display:flex;flex-direction:column;gap:4px;}
-.meta-row .top{font-size:13px;color:var(--text);font-weight:600;}
-.meta-row .bottom{font-size:11px;color:var(--muted);display:flex;gap:12px;}
+.meta-row .top{font-size:13px;color:var(--ink);font-weight:700;}
+.meta-row .bottom{font-size:11px;color:var(--muted);display:flex;gap:12px;font-family:var(--mono);}
 .meta-row .bottom .ok{color:var(--green);}
 .meta-row .bottom .no{color:var(--red);}
+#timerDisp{font-family:var(--mono);}
 
 main{flex:1;padding:22px 20px 20px;padding-bottom:150px;background:var(--card);}
 
 /* START SCREEN */
 .start-screen{padding:8px 2px 4px;}
-.start-screen .gauge-hero{display:flex;justify-content:center;margin-bottom:22px;}
-.start-screen h2{font-size:26px;margin:0 0 10px;font-weight:800;color:var(--text);letter-spacing:-.3px;line-height:1.2;}
-.start-screen p{color:var(--muted);line-height:1.55;font-size:14.5px;margin:0 0 22px;}
-.stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:0 0 22px;}
-.stat-box{background:var(--bg);border-radius:14px;padding:16px;text-align:center;border:1px solid var(--border);}
-.stat-box .num{font-size:26px;font-weight:800;color:var(--blue);letter-spacing:-.5px;}
-.stat-box .lbl{font-size:11px;color:var(--muted);margin-top:3px;text-transform:uppercase;letter-spacing:.6px;}
+.start-screen .gauge-hero{display:flex;justify-content:center;margin-bottom:20px;}
+.start-screen h2{font-size:27px;margin:0 0 10px;font-weight:800;color:var(--ink);letter-spacing:-.5px;line-height:1.15;}
+.start-screen p{color:var(--muted);line-height:1.55;font-size:14.5px;margin:0 0 20px;}
+.stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:0 0 20px;}
+.stat-box{background:var(--paper);border-radius:12px;padding:16px;text-align:center;border:1px solid var(--line);}
+.stat-box .num{font-size:27px;font-weight:800;color:var(--blue);letter-spacing:-.5px;font-family:var(--mono);}
+.stat-box .lbl{font-size:10.5px;color:var(--muted);margin-top:3px;text-transform:uppercase;letter-spacing:.7px;font-weight:600;}
 
-.big-btn{display:block;width:100%;padding:16px;border:none;border-radius:14px;background:var(--blue);color:#fff;font-size:15.5px;font-weight:700;cursor:pointer;margin-top:10px;transition:transform .12s, filter .12s;letter-spacing:.1px;}
-.big-btn:active{transform:scale(.98);filter:brightness(.95);}
-.big-btn.secondary{background:var(--bg);color:var(--text);border:1px solid var(--border);}
-.big-btn.ghost{background:transparent;color:var(--muted);border:1px dashed var(--border);}
+.big-btn{display:block;width:100%;padding:16px;border:none;border-radius:12px;background:var(--ink);color:#fff;font-size:15.5px;font-weight:700;cursor:pointer;margin-top:10px;transition:transform .12s, filter .12s;letter-spacing:.1px;}
+.big-btn:active{transform:scale(.98);filter:brightness(1.15);}
+.big-btn.secondary{background:var(--paper);color:var(--ink);border:1px solid var(--line);}
+.big-btn.ghost{background:transparent;color:var(--muted);border:1px dashed var(--line);}
+#app .start-screen > .big-btn:nth-of-type(1){background:var(--yellow);color:var(--yellow-ink);}
+#app .start-screen > .big-btn:nth-of-type(1):active{filter:brightness(.96);}
 
 /* QUESTION */
 .q-card{animation:cardIn .28s ease;}
 @keyframes cardIn{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);}}
-.q-cat{font-size:10.5px;color:var(--blue);margin-bottom:8px;text-transform:uppercase;letter-spacing:1.2px;font-weight:700;}
-.q-stem{font-size:17px;font-weight:700;line-height:1.42;margin-bottom:16px;color:var(--text);letter-spacing:-.1px;}
-.q-img-wrap{text-align:center;margin-bottom:16px;background:var(--bg);border-radius:16px;padding:10px;border:1px solid var(--border);}
-.q-img-wrap img{max-width:100%;max-height:260px;border-radius:10px;display:block;margin:0 auto;}
+.q-cat{display:flex;align-items:center;gap:8px;font-size:10.5px;color:var(--blue);margin-bottom:12px;text-transform:uppercase;letter-spacing:1.3px;font-weight:800;font-family:var(--mono);}
+.q-cat .qnum-badge{background:var(--ink);color:#fff;border-radius:7px;padding:3px 8px;font-family:var(--mono);letter-spacing:0;}
+.q-stem{font-size:17px;font-weight:700;line-height:1.42;margin-bottom:16px;color:var(--ink);letter-spacing:-.15px;}
+.q-img-wrap{text-align:center;margin-bottom:16px;background:var(--paper);border-radius:14px;padding:10px;border:1px solid var(--line);}
+.q-img-wrap img{max-width:100%;max-height:260px;border-radius:9px;display:block;margin:0 auto;}
 
-.answer{display:flex;align-items:flex-start;gap:13px;padding:15px 16px;border-radius:14px;border:1.5px solid var(--border);margin-bottom:10px;cursor:pointer;background:var(--card);transition:.15s;}
+.answer{display:flex;align-items:flex-start;gap:13px;padding:15px 16px;border-radius:12px;border:1.5px solid var(--line);border-left:4px solid var(--line);margin-bottom:10px;cursor:pointer;background:var(--card);transition:.15s;}
 .answer:active{transform:scale(.99);}
-.answer:hover:not(.disabled){border-color:#93c5fd;background:var(--blue-bg);}
-.answer .idx{width:26px;height:26px;border-radius:8px;background:var(--bg);display:flex;align-items:center;justify-content:center;font-size:12.5px;font-weight:700;flex-shrink:0;color:var(--muted);}
-.answer .txt{flex:1;font-size:14.5px;line-height:1.45;padding-top:3px;color:var(--text);}
+.answer:hover:not(.disabled){border-color:#a9c3e0;border-left-color:var(--blue);background:var(--blue-bg);}
+.answer .idx{width:25px;height:25px;border-radius:7px;background:var(--paper);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;flex-shrink:0;color:var(--muted);font-family:var(--mono);}
+.answer .txt{flex:1;font-size:14.5px;line-height:1.45;padding-top:3px;color:var(--ink);}
 .answer img{max-width:100%;border-radius:8px;}
-.answer.correct{border-color:var(--green);background:var(--green-bg);}
-.answer.selected{border-color:var(--blue);background:var(--blue-bg);}
+.answer.correct{border-color:var(--green);border-left-color:var(--green);background:var(--green-bg);}
+.answer.selected{border-color:var(--blue);border-left-color:var(--blue);background:var(--blue-bg);}
 .answer.selected .idx{background:var(--blue);color:#fff;}
 .answer.correct .idx{background:var(--green);color:#fff;}
-.answer.correct .txt{color:#14532d;}
-.answer.wrong{border-color:var(--red);background:var(--red-bg);}
+.answer.correct .txt{color:#0f4a30;}
+.answer.wrong{border-color:var(--red);border-left-color:var(--red);background:var(--red-bg);}
 .answer.wrong .idx{background:var(--red);color:#fff;}
-.answer.wrong .txt{color:#7f1d1d;}
+.answer.wrong .txt{color:#7a1322;}
 .answer.disabled{pointer-events:none;}
 
 footer{position:sticky;bottom:0;background:linear-gradient(180deg,rgba(255,255,255,0),var(--card) 30%);padding:16px 20px;padding-bottom:calc(70px + env(safe-area-inset-bottom));max-width:640px;margin:0 auto;width:100%;}
 .hidden{display:none !important;}
 
-.badge{display:inline-block;padding:6px 16px;border-radius:20px;font-size:12px;font-weight:800;letter-spacing:.5px;text-transform:uppercase;}
-.badge.pass{background:var(--green-bg);color:#166534;}
-.badge.fail{background:var(--red-bg);color:#991b1b;}
+.badge{display:inline-block;padding:6px 18px;border-radius:8px;font-size:12px;font-weight:800;letter-spacing:.8px;text-transform:uppercase;font-family:var(--mono);}
+.badge.pass{background:var(--green-bg);color:var(--green);border:1.5px solid var(--green);}
+.badge.fail{background:var(--red-bg);color:var(--red);border:1.5px solid var(--red);}
 
-.result-list{margin-top:22px;background:var(--bg);border-radius:14px;padding:6px 16px;border:1px solid var(--border);}
-.result-item{padding:12px 0;border-bottom:1px solid var(--border);font-size:12.5px;display:flex;justify-content:space-between;gap:10px;color:var(--text);}
+.result-list{margin-top:22px;background:var(--paper);border-radius:12px;padding:6px 16px;border:1px solid var(--line);}
+.result-item{padding:12px 0;border-bottom:1px solid var(--line);font-size:12.5px;display:flex;justify-content:space-between;gap:10px;color:var(--ink);}
 .result-item:last-child{border-bottom:none;}
-.result-item .ok{color:var(--green);font-weight:700;flex-shrink:0;}
-.result-item .no{color:var(--red);font-weight:700;flex-shrink:0;}
+.result-item .ok{color:var(--green);font-weight:800;flex-shrink:0;font-family:var(--mono);}
+.result-item .no{color:var(--red);font-weight:800;flex-shrink:0;font-family:var(--mono);}
 
 /* SPEEDOMETER GAUGE */
 .gauge{position:relative;width:220px;height:130px;margin:6px auto 0;}
 .gauge svg{width:100%;height:100%;display:block;}
-.gauge-pct{position:absolute;bottom:6px;left:0;right:0;text-align:center;font-size:40px;font-weight:800;color:var(--text);letter-spacing:-1px;}
+.gauge-pct{position:absolute;bottom:6px;left:0;right:0;text-align:center;font-size:40px;font-weight:800;color:var(--ink);letter-spacing:-1px;font-family:var(--mono);}
 .gauge-sub{position:absolute;bottom:-20px;left:0;right:0;text-align:center;font-size:12px;color:var(--muted);}
 .needle{transform-origin:110px 110px;transition:transform 1.1s cubic-bezier(.2,.9,.25,1);}
 
 .reveal-btn-wrap{margin-top:4px;}
-.reveal-box{margin-top:14px;padding:18px;border-radius:14px;background:var(--green-bg);border:1.5px solid var(--green);font-size:18px;font-weight:800;text-align:center;color:#14532d;animation:cardIn .25s ease;}
+.reveal-box{margin-top:14px;padding:18px;border-radius:12px;background:var(--green-bg);border:1.5px solid var(--green);font-size:17px;font-weight:800;text-align:center;color:#0f4a30;animation:cardIn .25s ease;}
 .self-assess{display:flex;gap:10px;margin-top:14px;}
 .self-assess .answer{flex:1;justify-content:center;margin-bottom:0;}
 .self-assess .answer .txt{text-align:center;flex:none;padding-top:0;}
 
 .toolbar-row{display:flex;align-items:center;gap:8px;}
-.icon-btn{width:36px;height:36px;border-radius:10px;background:var(--bg);border:1px solid var(--border);font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--text);flex-shrink:0;}
+.icon-btn{width:36px;height:36px;border-radius:10px;background:var(--paper);border:1px solid var(--line);font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--ink);flex-shrink:0;}
 .icon-btn:active{transform:scale(.94);}
-.icon-btn.active{background:#fef9e7;border-color:#f2b705;color:#f2b705;}
-#qCounter{cursor:pointer;text-decoration:underline;text-decoration-color:var(--border);text-underline-offset:3px;}
+.icon-btn.active{background:#FFF6E0;border-color:var(--yellow);color:#9a6b00;}
+#qCounter{cursor:pointer;text-decoration:underline;text-decoration-color:var(--line);text-underline-offset:3px;font-family:var(--mono);}
 
-#qGridOverlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:50;display:flex;align-items:flex-end;}
+#qGridOverlay{position:fixed;inset:0;background:rgba(17,18,22,.55);z-index:50;display:flex;align-items:flex-end;}
 #qGridOverlay .sheet{background:var(--card);width:100%;max-width:640px;margin:0 auto;border-radius:20px 20px 0 0;padding:20px;max-height:75vh;overflow-y:auto;padding-bottom:calc(20px + env(safe-area-inset-bottom));}
 #qGridOverlay .sheet-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;}
-#qGridOverlay .sheet-header h3{margin:0;font-size:16px;}
-#qGridOverlay .close-x{background:var(--bg);border:1px solid var(--border);border-radius:8px;width:30px;height:30px;font-size:15px;cursor:pointer;color:var(--text);}
+#qGridOverlay .sheet-header h3{margin:0;font-size:16px;font-weight:800;}
+#qGridOverlay .close-x{background:var(--paper);border:1px solid var(--line);border-radius:8px;width:30px;height:30px;font-size:15px;cursor:pointer;color:var(--ink);}
 .qgrid{display:grid;grid-template-columns:repeat(6,1fr);gap:8px;}
-.qgrid .qcell{aspect-ratio:1;border-radius:9px;border:1.5px solid var(--border);background:var(--bg);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;cursor:pointer;color:var(--text);}
+.qgrid .qcell{aspect-ratio:1;border-radius:8px;border:1.5px solid var(--line);background:var(--paper);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;cursor:pointer;color:var(--ink);font-family:var(--mono);}
 .qgrid .qcell.answered{background:var(--blue-bg);border-color:var(--blue);color:var(--blue-dim);}
 .qgrid .qcell.current{background:var(--blue);border-color:var(--blue);color:#fff;}
-.qgrid .qcell.flagged{box-shadow:0 0 0 2px #f2b705 inset;}
+.qgrid .qcell.flagged{box-shadow:0 0 0 2px var(--yellow) inset;}
 .qgrid-legend{display:flex;gap:14px;margin-top:14px;font-size:11px;color:var(--muted);flex-wrap:wrap;}
 .qgrid-legend span{display:inline-flex;align-items:center;gap:5px;}
 .qgrid-legend i{width:12px;height:12px;border-radius:4px;display:inline-block;}
-#timerDisp{font-variant-numeric:tabular-nums;font-weight:700;color:var(--text);}
+#timerDisp{font-variant-numeric:tabular-nums;font-weight:700;color:var(--ink);}
 #timerDisp.low{color:var(--red);}
 
 .cat-chips{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 18px;}
-.cat-chip{padding:9px 15px;border-radius:20px;border:1.5px solid var(--border);font-size:13px;font-weight:600;background:var(--card);cursor:pointer;color:var(--text);}
+.cat-chip{padding:9px 15px;border-radius:20px;border:1.5px solid var(--line);font-size:13px;font-weight:600;background:var(--card);cursor:pointer;color:var(--ink);}
 .cat-chip.active{background:var(--blue);color:#fff;border-color:var(--blue);}
 
 .browse-nav{display:flex;gap:10px;}
 .browse-nav .big-btn{flex:1;}
 
-.share-btn{background:none;border:1px solid var(--border);border-radius:12px;padding:12px;font-size:14px;color:var(--text);width:100%;margin-top:10px;cursor:pointer;}
+.share-btn{background:none;border:1px solid var(--line);border-radius:12px;padding:12px;font-size:14px;color:var(--ink);width:100%;margin-top:10px;cursor:pointer;}
 </style>
 </head>
 <body>
@@ -179,13 +187,14 @@ footer{position:sticky;bottom:0;background:linear-gradient(180deg,rgba(255,255,2
       </div>
     </div>
   </header>
+  <div class="lane"></div>
   <div id="qGridOverlay" class="hidden"></div>
   <main id="main"></main>
   <footer id="footer" class="hidden"></footer>
 </div>
 
 <noscript>
-  <div style="padding:30px;font-family:sans-serif;text-align:center;color:#111827;">
+  <div style="padding:30px;font-family:sans-serif;text-align:center;color:#1C1D22;">
     <h2>Потребен е JavaScript</h2>
     <p>Овој фајл треба да се отвори во вистински прелистувач (Safari, Chrome), не во преглед во апликација.
     Симни го фајлот и отвори го со "Open in Safari" / "Open in Chrome".</p>
@@ -234,6 +243,30 @@ function toggleBookmark(){
   try{ localStorage.setItem(BOOKMARK_KEY, JSON.stringify(bm)); }catch(e){}
   document.getElementById('starBtn').classList.toggle('active', bm.includes(i));
   document.getElementById('starBtn').textContent = bm.includes(i) ? '★' : '☆';
+}
+
+const QSTATS_KEY = 'vozacka_qstats';
+function loadQStats(){
+  try{ return JSON.parse(localStorage.getItem(QSTATS_KEY) || '{}'); }catch(e){ return {}; }
+}
+function recordAnswerStat(gidx, correct){
+  try{
+    const stats = loadQStats();
+    const s = stats[gidx] || {c:0,t:0};
+    s.t++;
+    if(correct) s.c++;
+    stats[gidx] = s;
+    localStorage.setItem(QSTATS_KEY, JSON.stringify(stats));
+  }catch(e){ /* ignore */ }
+}
+function getWeakIds(){
+  const stats = loadQStats();
+  const inCat = catIndices();
+  const withStats = inCat.filter(i=>stats[i] && stats[i].t>0);
+  // include: anything ever answered wrong (c<t), sorted worst-accuracy first
+  const weak = withStats.filter(i=>stats[i].c < stats[i].t);
+  weak.sort((a,b)=> (stats[a].c/stats[a].t) - (stats[b].c/stats[b].t));
+  return weak;
 }
 
 function vibrate(pattern){
@@ -289,7 +322,7 @@ function renderQuestionGrid(){
     <div class="qgrid">${cells}</div>
     <div class="qgrid-legend">
       <span><i style="background:var(--blue-bg);border:1.5px solid var(--blue);"></i>Одговорено</span>
-      <span><i style="background:var(--bg);border:1.5px solid var(--border);"></i>Неодговорено</span>
+      <span><i style="background:var(--paper);border:1.5px solid var(--line);"></i>Неодговорено</span>
       <span><i style="background:#fef9e7;box-shadow:0 0 0 2px #f2b705 inset;"></i>Обележано</span>
     </div>
   </div>`;
@@ -345,7 +378,7 @@ function saveAttempt(record){
 function modeLabel(mode){
   if(mode==='full') return 'Цел тест';
   if(mode==='exam') return 'Симулација на испит';
-  if(mode==='wrong') return 'Погрешни прашања';
+  if(mode==='wrong') return 'Слаби места';
   if(mode==='bookmarked') return 'Обележани';
   if(mode==='browse') return 'Учење';
   return mode;
@@ -414,11 +447,11 @@ function gaugeSvg(pct){
   }
   // needle always drawn pointing at 0% (straight left); rotated via CSS transform by 1.8*pct deg to reach target
   return `<svg viewBox="0 0 220 130">
-    ${arc(0,50,'#E2482F')}
-    ${arc(50,75,'#1a56db')}
-    ${arc(75,100,'#2FA84F')}
-    <line class="needle" id="needleEl" x1="${cx}" y1="${cy}" x2="${cx-72}" y2="${cy}" stroke="#111827" stroke-width="4" stroke-linecap="round" style="transform-origin:${cx}px ${cy}px;transform:rotate(${pct*1.8}deg);"/>
-    <circle cx="${cx}" cy="${cy}" r="7" fill="#111827"/>
+    ${arc(0,50,'#D7263D')}
+    ${arc(50,75,'#0B4F9C')}
+    ${arc(75,100,'#1B8A5A')}
+    <line class="needle" id="needleEl" x1="${cx}" y1="${cy}" x2="${cx-72}" y2="${cy}" stroke="#1C1D22" stroke-width="4" stroke-linecap="round" style="transform-origin:${cx}px ${cy}px;transform:rotate(${pct*1.8}deg);"/>
+    <circle cx="${cx}" cy="${cy}" r="7" fill="#1C1D22"/>
   </svg>`;
 }
 
@@ -458,7 +491,7 @@ function renderStart(){
       <button class="big-btn" onclick="startQuiz('full')">Започни го целиот тест</button>
       <button class="big-btn secondary" onclick="startQuiz('exam')">Симулација на испит · 30 прашања · 120 поени · ⏱ 60 мин</button>
       <button class="big-btn secondary" onclick="startQuiz('browse')">📖 Режим на учење (слободно прелистување)</button>
-      <button class="big-btn ghost" onclick="startQuiz('wrong')" id="wrongBtn">Вежбај само погрешени</button>
+      <button class="big-btn ghost" onclick="startQuiz('wrong')" id="wrongBtn">🎯 Вежбај слаби места</button>
       <button class="big-btn ghost" onclick="startQuiz('bookmarked')" id="bmBtn">${bmCount>0 ? `⭐ Обележани · ${bmCount}` : ''}</button>
       <button class="big-btn ghost" onclick="renderHistory()" id="historyBtn">📊 Историја на обиди</button>
     </div>
@@ -596,11 +629,12 @@ function renderHistory(){
 }
 
 function resetAll(){
-  if(!confirm('Ова целосно ќе ги избрише: тековниот тест во тек, целата историја на обиди и сите обележани прашања. Сигурен си?')) return;
+  if(!confirm('Ова целосно ќе ги избрише: тековниот тест во тек, целата историја на обиди, статистиката по прашања и сите обележани прашања. Сигурен си?')) return;
   try{
     localStorage.removeItem(HISTORY_KEY);
     localStorage.removeItem(PROGRESS_KEY);
     localStorage.removeItem(BOOKMARK_KEY);
+    localStorage.removeItem(QSTATS_KEY);
   }catch(e){}
   clearTimer();
   state = { queue: [], idx: 0, answers: {}, mode: null, answered: false, category: state.category, browseIdx: 0, examEndTime: null, timerInterval: null };
@@ -613,17 +647,11 @@ function clearHistory(){
 }
 
 function updateWrongBtn(){
-  const wrongIds = getWrongIds();
+  const weakIds = getWeakIds();
   const btn = document.getElementById('wrongBtn');
   if(!btn) return;
-  if(wrongIds.length===0){ btn.classList.add('hidden'); }
-  else { btn.classList.remove('hidden'); btn.textContent = `Вежбај само погрешени · ${wrongIds.length}`; }
-}
-
-function getWrongIds(){
-  return Object.keys(state.answers)
-    .map(Number)
-    .filter(i=>!state.answers[i].correct && ALL_Q[i].cats.includes(state.category));
+  if(weakIds.length===0){ btn.classList.add('hidden'); }
+  else { btn.classList.remove('hidden'); btn.textContent = `🎯 Вежбај слаби места · ${weakIds.length}`; }
 }
 
 function startQuiz(mode){
@@ -645,7 +673,7 @@ function startQuiz(mode){
     state.examEndTime = Date.now() + 60*60*1000;
     startTimer();
   } else if(mode==='wrong'){
-    state.queue = shuffle(getWrongIds());
+    state.queue = getWeakIds();
     startTimer();
   } else if(mode==='bookmarked'){
     const bm = loadBookmarks().filter(i=>ALL_Q[i].cats.includes(state.category));
@@ -738,7 +766,7 @@ function renderQuestion(){
 
   const typeLbl = q.type==='order' ? 'Редослед на минување' : (q.type==='reveal' ? 'Отвори прашање' : (q.type==='match' ? 'Сообраќаен знак' : 'Прашање бр. '+q.n));
   const ptsTxt = q.pts ? `${q.pts} ${q.pts===1?'поен':'поени'}` : '';
-  let html = `<div class="q-card"><div class="q-cat">№${q.n} · ${typeLbl}${ptsTxt ? ' · '+ptsTxt : ''}${locked?' · 🔒 Потврдено':''}</div>`;
+  let html = `<div class="q-card"><div class="q-cat"><span class="qnum-badge">№${q.n}</span> ${typeLbl}${ptsTxt ? ' · '+ptsTxt : ''}${locked?' · 🔒 Потврдено':''}</div>`;
   html += `<div class="q-stem">${q.stem}</div>`;
   if(q.img){
     html += `<div class="q-img-wrap"><img src="${q.img}"></div>`;
@@ -748,12 +776,12 @@ function renderQuestion(){
       const savedVal = existing ? existing.selected : '';
       html += `<div class="reveal-btn-wrap">
         <input type="text" id="revealInput" placeholder="Внеси го одговорот..." inputmode="numeric" autocomplete="off" value="${savedVal||''}" ${locked?'disabled':''}
-          style="width:100%;padding:14px;font-size:17px;border:2px solid var(--border);border-radius:12px;box-sizing:border-box;">
+          style="width:100%;padding:14px;font-size:17px;border:2px solid var(--line);border-radius:12px;box-sizing:border-box;">
       </div>`;
     } else {
       html += `<div class="reveal-btn-wrap">
         <input type="text" id="revealInput" placeholder="Внеси го одговорот..." inputmode="numeric" autocomplete="off"
-          style="width:100%;padding:14px;font-size:17px;border:2px solid var(--border);border-radius:12px;box-sizing:border-box;"
+          style="width:100%;padding:14px;font-size:17px;border:2px solid var(--line);border-radius:12px;box-sizing:border-box;"
           onkeydown="if(event.key==='Enter'){ event.preventDefault(); checkRevealAnswer(); }">
         <button class="big-btn" onclick="checkRevealAnswer()" style="margin-top:10px;">Провери</button>
         <div id="revealBox" class="hidden reveal-box"></div>
@@ -803,10 +831,12 @@ function confirmExamAnswer(){
     const correctVal = q.options[0].trim();
     const isCorrect = userVal === correctVal || parseFloat(userVal) === parseFloat(correctVal);
     state.answers[gidx] = {selected: userVal, correct: isCorrect};
+    recordAnswerStat(gidx, isCorrect);
   } else {
     if(state.pendingIdx === null){ alert('Избери одговор пред да потврдиш.'); return; }
     const correct = state.pendingIdx === q.correct;
     state.answers[gidx] = {selected: state.pendingIdx, correct};
+    recordAnswerStat(gidx, correct);
   }
   vibrate(30);
   updateHeaderStats();
@@ -861,7 +891,7 @@ function renderBrowse(){
 
   const typeLbl = q.type==='order' ? 'Редослед на минување' : (q.type==='reveal' ? 'Отвори прашање' : (q.type==='match' ? 'Сообраќаен знак' : 'Прашање бр. '+q.n));
   const ptsTxt = q.pts ? `${q.pts} ${q.pts===1?'поен':'поени'}` : '';
-  let html = `<div class="q-card"><div class="q-cat">№${q.n} · ${typeLbl}${ptsTxt ? ' · '+ptsTxt : ''}</div>`;
+  let html = `<div class="q-card"><div class="q-cat"><span class="qnum-badge">№${q.n}</span> ${typeLbl}${ptsTxt ? ' · '+ptsTxt : ''}</div>`;
   html += `<div class="q-stem">${q.stem}</div>`;
   if(q.img){ html += `<div class="q-img-wrap"><img src="${q.img}"></div>`; }
   if(q.type === 'reveal'){
@@ -908,6 +938,7 @@ function checkRevealAnswer(){
 
   state.answered = true;
   state.answers[qid] = {selected: userVal, correct: isCorrect};
+  recordAnswerStat(qid, isCorrect);
 
   input.disabled = true;
   document.querySelector('.reveal-btn-wrap .big-btn').disabled = true;
@@ -918,7 +949,7 @@ function checkRevealAnswer(){
     vibrate(30);
     box.style.background = 'var(--blue-bg)';
     box.style.border = '1.5px solid var(--blue)';
-    box.style.color = 'var(--text)';
+    box.style.color = 'var(--ink)';
     box.textContent = `Одговорот е зачуван: ${userVal || '(празно)'}`;
   } else if(isCorrect){
     vibrate(45);
@@ -977,6 +1008,7 @@ function selectAnswer(i){
   if(state.answered) return;
   state.answered = true;
   state.answers[qid] = {selected:i, correct};
+  recordAnswerStat(qid, correct);
   vibrate(correct ? 45 : [40,60,40]);
   document.querySelectorAll('.answer').forEach(el=>{
     el.classList.add('disabled');
@@ -1052,7 +1084,7 @@ function renderResults(){
       <div class="gauge-pct">${pct}%</div>
     </div>
     <div style="margin-top:34px;">
-      <div style="font-size:13px;color:#6b7280;margin-bottom:4px;">${correctCount} од ${total} точни</div>
+      <div style="font-size:13px;color:#75726A;margin-bottom:4px;">${correctCount} од ${total} точни</div>
       <div style="font-size:12px;color:var(--muted);margin-bottom:10px;">⏱ Времетраење: ${formatDuration(elapsedMs)}</div>
       <span class="badge ${passed?'pass':'fail'}">${passed ? '✓ Положи' : '✗ Не положи'}</span>
     </div>
