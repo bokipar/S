@@ -269,6 +269,29 @@ function getWeakIds(){
   return weak;
 }
 
+const TYPE_NAMES = {mc:'Општи прашања', match:'Сообраќајни знаци', order:'Редослед на минување', reveal:'Отворени прашања'};
+
+function getWeakestType(){
+  const stats = loadQStats();
+  const inCat = catIndices();
+  const byType = {};
+  inCat.forEach(i=>{
+    if(!stats[i] || !stats[i].t) return;
+    const t = ALL_Q[i].type;
+    byType[t] = byType[t] || {c:0,t:0};
+    byType[t].c += stats[i].c;
+    byType[t].t += stats[i].t;
+  });
+  let worst = null, worstAcc = 2;
+  Object.keys(byType).forEach(t=>{
+    if(byType[t].t < 3) return; // need a minimum sample size to be meaningful
+    const acc = byType[t].c/byType[t].t;
+    if(acc < worstAcc){ worstAcc = acc; worst = t; }
+  });
+  if(!worst) return null;
+  return {type: worst, acc: worstAcc, correct: byType[worst].c, total: byType[worst].t};
+}
+
 function vibrate(pattern){
   try{ if(navigator.vibrate) navigator.vibrate(pattern); }catch(e){}
 }
@@ -379,6 +402,7 @@ function modeLabel(mode){
   if(mode==='full') return 'Цел тест';
   if(mode==='exam') return 'Симулација на испит';
   if(mode==='wrong') return 'Слаби места';
+  if(mode==='weaktype') return 'Најслаб тип';
   if(mode==='bookmarked') return 'Обележани';
   if(mode==='browse') return 'Учење';
   return mode;
@@ -492,12 +516,14 @@ function renderStart(){
       <button class="big-btn secondary" onclick="startQuiz('exam')">Симулација на испит · 30 прашања · 120 поени · ⏱ 60 мин</button>
       <button class="big-btn secondary" onclick="startQuiz('browse')">📖 Режим на учење (слободно прелистување)</button>
       <button class="big-btn ghost" onclick="startQuiz('wrong')" id="wrongBtn">🎯 Вежбај слаби места</button>
+      <button class="big-btn ghost" onclick="startQuiz('weaktype')" id="weakTypeBtn">📉 Вежбај најслаб тип</button>
       <button class="big-btn ghost" onclick="startQuiz('bookmarked')" id="bmBtn">${bmCount>0 ? `⭐ Обележани · ${bmCount}` : ''}</button>
       <button class="big-btn ghost" onclick="renderHistory()" id="historyBtn">📊 Историја на обиди</button>
     </div>
   `;
   if(bmCount===0) document.getElementById('bmBtn').classList.add('hidden');
   updateWrongBtn();
+  updateWeakTypeBtn();
   updateHistoryBtn();
 }
 
@@ -664,6 +690,25 @@ function updateWrongBtn(){
   }
 }
 
+function updateWeakTypeBtn(){
+  const btn = document.getElementById('weakTypeBtn');
+  if(!btn) return;
+  btn.classList.remove('hidden');
+  const info = getWeakestType();
+  if(!info){
+    btn.textContent = '📉 Најслаб тип (сè уште нема доволно податоци)';
+    btn.disabled = true;
+    btn.style.opacity = '.45';
+    btn.style.cursor = 'default';
+  } else {
+    const pct = Math.round(info.acc*100);
+    btn.textContent = `📉 Вежбај: ${TYPE_NAMES[info.type]||info.type} · ${pct}% успешност`;
+    btn.disabled = false;
+    btn.style.opacity = '';
+    btn.style.cursor = '';
+  }
+}
+
 function startQuiz(mode){
   state.mode = mode;
   state.idx = 0;
@@ -686,6 +731,12 @@ function startQuiz(mode){
     const weak = getWeakIds();
     if(weak.length===0){ renderStart(); return; }
     state.queue = weak;
+    startTimer();
+  } else if(mode==='weaktype'){
+    const info = getWeakestType();
+    if(!info){ renderStart(); return; }
+    const pool = catIdx.filter(i=>ALL_Q[i].type===info.type);
+    state.queue = shuffle(pool);
     startTimer();
   } else if(mode==='bookmarked'){
     const bm = loadBookmarks().filter(i=>ALL_Q[i].cats.includes(state.category));
